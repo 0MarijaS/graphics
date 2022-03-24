@@ -45,6 +45,14 @@ struct PointLight {
     float quadratic;
 };
 
+struct DirLight {
+    glm::vec3 direction;
+
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+};
+
 int main()
 {
     // glfw: initialize and configure
@@ -102,6 +110,12 @@ int main()
     pointLight.constant = 1.0f;
     pointLight.linear = 0.09f;
     pointLight.quadratic = 0.032f;
+
+    DirLight dirLight;
+    dirLight.direction= glm::vec3(-0.2f, -1.0f, -0.3f);
+    dirLight.ambient= glm::vec3(0.05f, 0.05f, 0.05f);
+    dirLight.diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
+    dirLight.specular= glm::vec3(0.5f, 0.5f, 0.5f);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -278,6 +292,12 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.use();
+        shader.setFloat("material.shininess", 32.0f);
+        shader.setVec3("viewPosition", camera.Position);
+        shader.setVec3("dirLight.direction", dirLight.direction);
+        shader.setVec3("dirLight.ambient", dirLight.ambient);
+        shader.setVec3("dirLight.diffuse", dirLight.diffuse);
+        shader.setVec3("dirLight.specular", dirLight.specular);
         pointLight.position = glm::vec3(4.0 * cos(currentFrame), 4.0f, 4.0 * sin(currentFrame));
         shader.setVec3("pointLight.position", pointLight.position);
         shader.setVec3("pointLight.ambient", pointLight.ambient);
@@ -286,8 +306,7 @@ int main()
         shader.setFloat("pointLight.constant", pointLight.constant);
         shader.setFloat("pointLight.linear", pointLight.linear);
         shader.setFloat("pointLight.quadratic", pointLight.quadratic);
-        shader.setFloat("material.shininess", 32.0f);
-        shader.setVec3("viewPosition", camera.Position);
+
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
