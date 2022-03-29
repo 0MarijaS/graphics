@@ -116,6 +116,39 @@ private:
         return Mesh(vertices, indices, textures);
     }
 
+    unsigned int TextureFromFile(const char* filename, std::string directory) {
+        std::string fullPath(directory + "/" + filename);
+
+        unsigned int textureID;
+        glGenTextures(1, &textureID);
+
+        int width, height, nrComponents;
+        unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &nrComponents, 0);
+        if (data) {
+            GLenum format;
+            if (nrComponents == 1) {
+                format = GL_RED;
+            } else if (nrComponents == 3) {
+                format = GL_RGB;
+            } else if (nrComponents == 4) {
+                format = GL_RGBA;
+            }
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        } else {
+            ASSERT(false, "Failed to load texture image");
+        }
+        stbi_image_free(data);
+        return textureID;
+    }
+
     void loadTextureMaterial(aiMaterial* mat, aiTextureType type, std::string typeName,
                                              std::vector<Texture> & textures) {
 
@@ -126,7 +159,7 @@ private:
             bool skip = false;
 
             for (unsigned int j = 0; j < loaded_textures.size(); ++j) {
-                if (std::strcmp(str.C_Str(), loaded_textures[j].path.c_str()) == 0) {
+                if (std::strcmp(str.C_Str(), loaded_textures[i].path.c_str()) == 0) {
                     textures.push_back(loaded_textures[j]);
                     skip = true;
                     break;
@@ -170,7 +203,7 @@ unsigned int TextureFromFile(const char* filename, std::string directory) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     } else {
         ASSERT(false, "Failed to load texture image");

@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <rg/Error.h>
-#include "Shader.h"
+#include <rg/Shader.h>
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
@@ -67,7 +67,7 @@ public:
         }
 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TEXTURE_2D, indices.size(), GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
         glActiveTexture(GL_TEXTURE0);
