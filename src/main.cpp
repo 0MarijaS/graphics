@@ -25,7 +25,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 1.0f, 5.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -109,12 +109,21 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+
+
+
 
     // build and compile shaders
     // -------------------------
     Shader shader("resources/shaders/shader.vs", "resources/shaders/shader.fs");
     Shader screenShader("resources/shaders/framebufferScreenShader.vs", "resources/shaders/framebufferScreenShader.fs");
+    Shader blendingShader("resources/shaders/blendingShader.vs", "resources/shaders/blendingShader.fs");
 
+    //Model ourModel(FileSystem::getPath("resources/objects/rust_gas/Gasoline_barrel.obj"));
+    //ourModel.SetShaderTextureNamePrefix("material.");
 
     PointLight pointLight;
     pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
@@ -194,14 +203,15 @@ int main()
             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
-    float planeVertices[] = {
-            10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f, 10.0f,  0.0f,
-            -10.0f, -0.5f, -10.0f, 0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
-            -10.0f, -0.5f,  10.0f, 0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
 
-            10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f, 10.0f,  0.0f,
-            10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f, 10.0f, 10.0f,
-            -10.0f, -0.5f, -10.0f, 0.0f, 1.0f, 0.0f ,   0.0f, 10.0f
+    float planeVertices[] = {
+            4.0f, -0.5f,  4.0f,  0.0f, 1.0f, 0.0f, 4.0f,  0.0f,
+            -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f,   0.0f, 4.0f,
+            -4.0f, -0.5f,  4.0f, 0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+
+            4.0f, -0.5f,  4.0f,  0.0f, 1.0f, 0.0f, 4.0f,  0.0f,
+            4.0f, -0.5f, -4.0f,  0.0f, 1.0f, 0.0f, 4.0f, 4.0f,
+            -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f ,   0.0f, 4.0f
     };
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
             // positions   // texCoords
@@ -212,6 +222,17 @@ int main()
             -1.0f,  1.0f,  0.0f, 1.0f,
             1.0f, -1.0f,  1.0f, 0.0f,
             1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    float transparentVertices[] = {
+            // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+            0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+            1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+            1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+            1.0f,  0.5f,  0.0f,  1.0f,  0.0f
     };
 
 
@@ -235,7 +256,7 @@ int main()
     glBindVertexArray(planeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
+   // glEnableVertexAttribArray(0);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)(3* sizeof(float)));
@@ -253,22 +274,46 @@ int main()
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    // transparent VAO
+    unsigned int transparentVAO, transparentVBO;
+    glGenVertexArrays(1, &transparentVAO);
+    glGenBuffers(1, &transparentVBO);
+    glBindVertexArray(transparentVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, transparentVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
 
     // load textures
     // -------------
-    unsigned int cubeTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/container2.png").c_str());
-    unsigned int cubeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/container2_specular.png").c_str());
-    unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/black_floor_diffuse.jpg").c_str());
-    unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/black_floor_specular.jpg").c_str());
+    unsigned int cubeTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/rust_diffuse.jpg").c_str());
+    unsigned int cubeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/rust_specular.jpg").c_str());
+    unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/asphalt_diffuse.jpg").c_str());
+    unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/asphalt_specular.jpg").c_str());
+    unsigned int transparentTexture = loadTexture(FileSystem::getPath("resources/textures/caution.png").c_str());
 
     // shader configuration
     // --------------------
-    shader.use();
-    shader.setInt("material.texture_diffuse1",0);
-    shader.setInt("material.texture_specular1", 1);
+   // shader.use();
+    //shader.setInt("material.texture_diffuse1",0);
+    //shader.setInt("material.texture_specular1", 1);
 
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
+
+    vector<glm::vec3> blending
+            {
+                    glm::vec3(-2.32f, 0.0f, -0.48f),
+                    glm::vec3( 1.68f, 0.0f, -0.48f),
+
+            };
+
+    blendingShader.use();
+    blendingShader.setInt("texture1", 0);
 
     // framebuffer configuration
     // -------------------------
@@ -323,9 +368,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.use();
-        //dirLight
         shader.setFloat("material.shininess", 32.0f);
         shader.setVec3("viewPosition", camera.Position);
+        //dirLight
         shader.setVec3("dirLight.direction", dirLight.direction);
         shader.setVec3("dirLight.ambient", dirLight.ambient);
         shader.setVec3("dirLight.diffuse", dirLight.diffuse);
@@ -362,13 +407,30 @@ int main()
         glBindTexture(GL_TEXTURE_2D, cubeTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, cubeTextureSpecular);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, -1.0f));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, -1.0f));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDisable(GL_CULL_FACE);
+        // blending
+        blendingShader.use();
+        blendingShader.setMat4("view", view);
+        blendingShader.setMat4("projection", projection);
+        glBindVertexArray(transparentVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, transparentTexture);
+        for (unsigned int i = 0; i < blending.size(); i++)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, blending[i]);
+            model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
+            blendingShader.setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
+        shader.use();
         // floor
         glBindVertexArray(planeVAO);
         glActiveTexture(GL_TEXTURE0);
@@ -378,6 +440,13 @@ int main()
         shader.setMat4("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+
+        //model
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.25f, 0.5f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));	// it's a bit too big for our scene, so scale it down
+        shader.setMat4("model", model);
+        //ourModel.Draw(shader);
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
