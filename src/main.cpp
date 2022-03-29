@@ -122,8 +122,8 @@ int main()
     Shader screenShader("resources/shaders/framebufferScreenShader.vs", "resources/shaders/framebufferScreenShader.fs");
     Shader blendingShader("resources/shaders/blendingShader.vs", "resources/shaders/blendingShader.fs");
 
-    //Model ourModel(FileSystem::getPath("resources/objects/rust_gas/Gasoline_barrel.obj"));
-    //ourModel.SetShaderTextureNamePrefix("material.");
+    Model ourModel(FileSystem::getPath("resources/objects/rust_gas/Gasoline_barrel.obj"));
+    ourModel.SetShaderTextureNamePrefix("material.");
 
     PointLight pointLight;
     pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
@@ -446,7 +446,7 @@ int main()
         model = glm::translate(model, glm::vec3(0.0f, 0.25f, 0.5f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));	// it's a bit too big for our scene, so scale it down
         shader.setMat4("model", model);
-        //ourModel.Draw(shader);
+        ourModel.Draw(shader);
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
