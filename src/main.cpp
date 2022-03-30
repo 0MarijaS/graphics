@@ -17,6 +17,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 unsigned int loadTexture(const char *path);
 
 
@@ -35,6 +36,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 bool blur = false;
+bool spotLightOn = false;
 
 struct PointLight {
     glm::vec3 position;
@@ -98,6 +100,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
 
     // tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -390,6 +393,7 @@ int main()
         shader.setFloat("pointLight.linear", pointLight.linear);
         shader.setFloat("pointLight.quadratic", pointLight.quadratic);
         //spotLight
+        shader.setBool("spotLightOn", spotLightOn);
         shader.setVec3("spotLight.position", camera.Position);
         shader.setVec3("spotLight.direction", camera.Front);
         shader.setVec3("spotLight.ambient", spotLight.ambient);
@@ -522,6 +526,15 @@ void processInput(GLFWwindow *window)
         pointLight.specular = glm::vec3(1.0, 1.0, 1.0);
     }
 }
+
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+
+    if (key == GLFW_KEY_X && action == GLFW_PRESS) {
+        spotLightOn = !spotLightOn;
+
+    }
+}
+
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
