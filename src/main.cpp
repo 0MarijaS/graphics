@@ -217,6 +217,35 @@ int main()
             4.0f, -0.5f, -4.0f,  0.0f, 1.0f, 0.0f, 4.0f, 4.0f,
             -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f ,   0.0f, 4.0f
     };
+
+
+    float leftWallVertices[] = {
+            -4.0f, -0.5f,  4.0f,  1.0f, 0.0f, 0.0f, 0.0f,  0.0f,
+            -4.0f, 5.0f, 4.0f, 1.0f, 0.0f, 0.0f,   0.0f, 4.0f,
+            -4.0f, -0.5f,  -4.0f, 1.0f, 0.0f, 0.0f,   4.0f,  0.0f,
+
+            -4.0f, -0.5f,  -4.0f,  1.0f, 0.0f, 0.0f, 4.0f,  0.0f,
+            -4.0f, 5.0f, -4.0f,  1.0f, 0.0f, 0.0f, 4.0f, 4.0f,
+            -4.0f, 5.0f, 4.0f, 1.0f, 0.0f, 0.0f,   0.0f, 4.0f
+    };
+    float rightWallVertices[] = {
+            4.0f, -0.5f,  4.0f,  -1.0f, 0.0f, 0.0f, 4.0f,  0.0f,
+            4.0f, 5.0f, 4.0f, -1.0f, 0.0f, 0.0f,   4.0f, 4.0f,
+            4.0f, -0.5f,  -4.0f, -1.0f, 0.0f, 0.0f,   0.0f,  0.0f,
+
+            4.0f, -0.5f,  -4.0f,  -1.0f, 0.0f, 0.0f, 4.0f,  0.0f,
+            4.0f, 5.0f, -4.0f,  -1.0f, 0.0f, 0.0f, 4.0f, 4.0f,
+            4.0f, 5.0f, 4.0f, -1.0f, 0.0f, 0.0f,   0.0f, 4.0f
+    };
+    float backWallVertices[] = {
+            -4.0f, -0.5f,  -4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f,
+            -4.0f, 5.0f, -4.0f, 0.0f, 0.0f, -1.0f,   0.0f, 4.0f,
+            4.0f, -0.5f,  -4.0f, 0.0f, 0.0f, -1.0f,   4.0f,  0.0f,
+
+            -4.0f, 5.0f,  -4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  4.0f,
+            4.0f, 5.0f, -4.0f,  0.0f, 0.0f, -1.0f, 4.0f, 4.0f,
+            4.0f, -0.5f, -4.0f, 0.0f, 0.0f, -1.0f,   4.0f, 0.0f
+    };
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
             // positions   // texCoords
             -1.0f,  1.0f,  0.0f, 1.0f,
@@ -267,6 +296,20 @@ int main()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6* sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    // Wall VAO
+    unsigned int WallVAO, WallVBO;
+    glGenVertexArrays(1, &WallVAO);
+    glGenBuffers(1, &WallVBO);
+    glBindVertexArray(WallVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, WallVBO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6* sizeof(float)));
+    glEnableVertexAttribArray(2);
     // screen quad VAO
     unsigned int quadVAO, quadVBO;
     glGenVertexArrays(1, &quadVAO);
@@ -298,6 +341,8 @@ int main()
     unsigned int cubeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/rust_specular.jpg").c_str());
     unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/asphalt_diffuse.jpg").c_str());
     unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/asphalt_specular.jpg").c_str());
+    unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/brickwall_diffuse.jpg").c_str());
+    unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/brickwall_specular.jpg").c_str());
     unsigned int transparentTexture = loadTexture(FileSystem::getPath("resources/textures/caution.png").c_str());
 
     // shader configuration
@@ -447,6 +492,34 @@ int main()
         glBindTexture(GL_TEXTURE_2D, floorTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, floorTextureSpecular);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
+        //Walls
+        glBindVertexArray(WallVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, WallVBO);
+        //leftWall
+        glBufferData(GL_ARRAY_BUFFER, sizeof(leftWallVertices), &leftWallVertices, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, wallTextureSpecular);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //rightWall
+        glBufferData(GL_ARRAY_BUFFER, sizeof(rightWallVertices), &rightWallVertices, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, wallTextureSpecular);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //backWall
+        glBufferData(GL_ARRAY_BUFFER, sizeof(backWallVertices), &backWallVertices, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, wallTextureSpecular);
         shader.setMat4("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
