@@ -381,6 +381,7 @@ int main()
             pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
         else
             pointLight.position = glm::vec3(4.0 * cos(currentFrame), 4.0f, 4.0 * sin(currentFrame));
+
         shader.setVec3("pointLight.position", pointLight.position);
         shader.setVec3("pointLight.ambient", pointLight.ambient);
         shader.setVec3("pointLight.diffuse", pointLight.diffuse);
@@ -508,6 +509,17 @@ void processInput(GLFWwindow *window)
     }
     if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE){
         blur = false;
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_G) == GLFW_PRESS){
+        pointLight.ambient = glm::vec3(0.0, 0.2, 0.0);
+        pointLight.diffuse = glm::vec3(0.0, 0.8, 0.0);
+        pointLight.specular = glm::vec3(0.0, 1.0, 0.0);
+    }
+    if(glfwGetKey(window,GLFW_KEY_G) == GLFW_RELEASE){
+        pointLight.ambient = glm::vec3(0.2, 0.2, 0.2);
+        pointLight.diffuse = glm::vec3(0.8, 0.8, 0.8);
+        pointLight.specular = glm::vec3(1.0, 1.0, 1.0);
     }
 }
 
