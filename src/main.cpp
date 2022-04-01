@@ -26,7 +26,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0f, 1.0f, 5.0f));
+Camera camera(glm::vec3(0.0f, 1.0f, 4.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -130,9 +130,9 @@ int main()
     Model ourModel(FileSystem::getPath("resources/objects/rust_gas/Gasoline_barrel.obj"));
     ourModel.SetShaderTextureNamePrefix("material.");
 
-    pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
+    pointLight.position = glm::vec3(0.0f, 4.0, 2.0);
     pointLight.ambient = glm::vec3(0.2, 0.2, 0.2);
-    pointLight.diffuse = glm::vec3(0.8, 0.8, 0.8);
+    pointLight.diffuse = glm::vec3(0.7, 0.7, 0.7);
     pointLight.specular = glm::vec3(1.0, 1.0, 1.0);
 
     pointLight.constant = 1.0f;
@@ -208,7 +208,7 @@ int main()
             -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top-left
     };
 
-    float planeVertices[] = {
+    float floorVertices[] {
             4.0f, -0.5f,  4.0f,  0.0f, 1.0f, 0.0f, 4.0f,  0.0f,
             -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f,   0.0f, 4.0f,
             -4.0f, -0.5f,  4.0f, 0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
@@ -216,6 +216,16 @@ int main()
             4.0f, -0.5f,  4.0f,  0.0f, 1.0f, 0.0f, 4.0f,  0.0f,
             4.0f, -0.5f, -4.0f,  0.0f, 1.0f, 0.0f, 4.0f, 4.0f,
             -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f ,   0.0f, 4.0f
+    };
+
+    float ceilingVertices[] = {
+            4.0f, 5.0f,  4.0f,  0.0f, -1.0f, 0.0f, 4.0f,  0.0f,
+            -4.0f, 5.0f, -4.0f, 0.0f, -1.0f, 0.0f,   0.0f, 4.0f,
+            -4.0f, 5.0f,  4.0f, 0.0f, -1.0f, 0.0f,   0.0f,  0.0f,
+
+            4.0f, 5.0f,  4.0f,  0.0f, -1.0f, 0.0f, 4.0f,  0.0f,
+            4.0f, 5.0f, -4.0f,  0.0f, -1.0f, 0.0f, 4.0f, 4.0f,
+            -4.0f, 5.0f, -4.0f, 0.0f, -1.0f, 0.0f ,   0.0f, 4.0f
     };
 
 
@@ -238,14 +248,25 @@ int main()
             4.0f, 5.0f, 4.0f, -1.0f, 0.0f, 0.0f,   0.0f, 4.0f
     };
     float backWallVertices[] = {
-            -4.0f, -0.5f,  -4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f,
-            -4.0f, 5.0f, -4.0f, 0.0f, 0.0f, -1.0f,   0.0f, 4.0f,
-            4.0f, -0.5f,  -4.0f, 0.0f, 0.0f, -1.0f,   4.0f,  0.0f,
+            -4.0f, -0.5f,  -4.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f,
+            -4.0f, 5.0f, -4.0f, 0.0f, 0.0f, 1.0f,   0.0f, 4.0f,
+            4.0f, -0.5f,  -4.0f, 0.0f, 0.0f, 1.0f,   4.0f,  0.0f,
 
-            -4.0f, 5.0f,  -4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  4.0f,
-            4.0f, 5.0f, -4.0f,  0.0f, 0.0f, -1.0f, 4.0f, 4.0f,
-            4.0f, -0.5f, -4.0f, 0.0f, 0.0f, -1.0f,   4.0f, 0.0f
+            -4.0f, 5.0f,  -4.0f,  0.0f, 0.0f, 1.0f, 0.0f,  4.0f,
+            4.0f, 5.0f, -4.0f,  0.0f, 0.0f, 1.0f, 4.0f, 4.0f,
+            4.0f, -0.5f, -4.0f, 0.0f, 0.0f, 1.0f,   4.0f, 0.0f
     };
+
+    float frontWallVertices[] = {
+            -4.0f, -0.5f,  4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f,
+            -4.0f, 5.0f, 4.0f, 0.0f, 0.0f, -1.0f,   0.0f, 4.0f,
+            4.0f, -0.5f,  4.0f, 0.0f, 0.0f, -1.0f,   4.0f,  0.0f,
+
+            -4.0f, 5.0f,  4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  4.0f,
+            4.0f, 5.0f, 4.0f,  0.0f, 0.0f, -1.0f, 4.0f, 4.0f,
+            4.0f, -0.5f, 4.0f, 0.0f, 0.0f, -1.0f,   4.0f, 0.0f
+    };
+
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
             // positions   // texCoords
             -1.0f,  1.0f,  0.0f, 1.0f,
@@ -288,7 +309,6 @@ int main()
     glGenBuffers(1, &planeVBO);
     glBindVertexArray(planeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
@@ -339,10 +359,10 @@ int main()
     // -------------
     unsigned int cubeTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/rust_diffuse.jpg").c_str());
     unsigned int cubeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/rust_specular.jpg").c_str());
-    unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/asphalt_diffuse.jpg").c_str());
-    unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/asphalt_specular.jpg").c_str());
-    unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/brickwall_diffuse.jpg").c_str());
-    unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/brickwall_specular.jpg").c_str());
+    unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/concrete_diffuse.jpg").c_str());
+    unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/concrete_specular.jpg").c_str());
+    unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/stonebrick_diffuse.jpg").c_str());
+    unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/stonebrick_specular.jpg").c_str());
     unsigned int transparentTexture = loadTexture(FileSystem::getPath("resources/textures/caution.png").c_str());
 
     // shader configuration
@@ -425,11 +445,6 @@ int main()
         shader.setVec3("dirLight.diffuse", dirLight.diffuse);
         shader.setVec3("dirLight.specular", dirLight.specular);
         //pointLight
-        if (blur)
-            pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
-        else
-            pointLight.position = glm::vec3(4.0 * cos(currentFrame), 4.0f, 4.0 * sin(currentFrame));
-
         shader.setVec3("pointLight.position", pointLight.position);
         shader.setVec3("pointLight.ambient", pointLight.ambient);
         shader.setVec3("pointLight.diffuse", pointLight.diffuse);
@@ -447,8 +462,8 @@ int main()
         shader.setFloat("spotLight.constant", spotLight.constant);
         shader.setFloat("spotLight.linear", spotLight.linear);
         shader.setFloat("spotLight.quadratic", spotLight.quadratic);
-        shader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-        shader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+        shader.setFloat("spotLight.cutOff", spotLight.cutOff);
+        shader.setFloat("spotLight.outerCutOff", spotLight.outerCutOff);
 
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -488,16 +503,22 @@ int main()
         shader.use();
         // floor
         glBindVertexArray(planeVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertices), &floorVertices, GL_STATIC_DRAW);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, floorTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, floorTextureSpecular);
         shader.setMat4("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        glBindVertexArray(0);
-        //Walls
-        glBindVertexArray(WallVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, WallVBO);
+        //ceiling
+        glBufferData(GL_ARRAY_BUFFER, sizeof(ceilingVertices), &ceilingVertices, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, floorTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, floorTextureSpecular);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         //leftWall
         glBufferData(GL_ARRAY_BUFFER, sizeof(leftWallVertices), &leftWallVertices, GL_STATIC_DRAW);
         glActiveTexture(GL_TEXTURE0);
@@ -508,6 +529,14 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 6);
         //rightWall
         glBufferData(GL_ARRAY_BUFFER, sizeof(rightWallVertices), &rightWallVertices, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, wallTextureSpecular);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //frontWall
+        glBufferData(GL_ARRAY_BUFFER, sizeof(frontWallVertices), &frontWallVertices, GL_STATIC_DRAW);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, wallTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
