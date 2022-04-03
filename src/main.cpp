@@ -22,11 +22,11 @@ unsigned int loadTexture(const char *path);
 
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1200;
+const unsigned int SCR_HEIGHT = 900;
 
 // camera
-Camera camera(glm::vec3(0.0f, 1.0f, 4.0f));
+Camera camera(glm::vec3(0.0f, 1.2f, 4.95f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -209,62 +209,62 @@ int main()
     };
 
     float floorVertices[] {
-            4.0f, -0.5f,  4.0f,  0.0f, 1.0f, 0.0f, 4.0f,  0.0f,
-            -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f,   0.0f, 4.0f,
-            -4.0f, -0.5f,  4.0f, 0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+            5.0f, -0.5f,  5.0f,  0.0f, 1.0f, 0.0f, 5.0f,  0.0f,
+            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f,   0.0f, 5.0f,
+            -5.0f, -0.5f,  5.0f, 0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
 
-            4.0f, -0.5f,  4.0f,  0.0f, 1.0f, 0.0f, 4.0f,  0.0f,
-            4.0f, -0.5f, -4.0f,  0.0f, 1.0f, 0.0f, 4.0f, 4.0f,
-            -4.0f, -0.5f, -4.0f, 0.0f, 1.0f, 0.0f ,   0.0f, 4.0f
+            5.0f, -0.5f,  5.0f,  0.0f, 1.0f, 0.0f, 5.0f,  0.0f,
+            5.0f, -0.5f, -5.0f,  0.0f, 1.0f, 0.0f, 5.0f, 5.0f,
+            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f ,   0.0f, 5.0f
     };
 
     float ceilingVertices[] = {
-            4.0f, 5.0f,  4.0f,  0.0f, -1.0f, 0.0f, 4.0f,  0.0f,
-            -4.0f, 5.0f, -4.0f, 0.0f, -1.0f, 0.0f,   0.0f, 4.0f,
-            -4.0f, 5.0f,  4.0f, 0.0f, -1.0f, 0.0f,   0.0f,  0.0f,
+            5.0f, 5.0f,  5.0f,  0.0f, -1.0f, 0.0f, 5.0f,  0.0f,
+            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f,   0.0f, 5.0f,
+            -5.0f, 5.0f,  5.0f, 0.0f, -1.0f, 0.0f,   0.0f,  0.0f,
 
-            4.0f, 5.0f,  4.0f,  0.0f, -1.0f, 0.0f, 4.0f,  0.0f,
-            4.0f, 5.0f, -4.0f,  0.0f, -1.0f, 0.0f, 4.0f, 4.0f,
-            -4.0f, 5.0f, -4.0f, 0.0f, -1.0f, 0.0f ,   0.0f, 4.0f
+            5.0f, 5.0f,  5.0f,  0.0f, -1.0f, 0.0f, 5.0f,  0.0f,
+            5.0f, 5.0f, -5.0f,  0.0f, -1.0f, 0.0f, 5.0f, 5.0f,
+            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f ,   0.0f, 5.0f
     };
 
 
     float leftWallVertices[] = {
-            -4.0f, -0.5f,  4.0f,  1.0f, 0.0f, 0.0f, 0.0f,  0.0f,
-            -4.0f, 5.0f, 4.0f, 1.0f, 0.0f, 0.0f,   0.0f, 4.0f,
-            -4.0f, -0.5f,  -4.0f, 1.0f, 0.0f, 0.0f,   4.0f,  0.0f,
+            -5.0f, -0.5f,  5.0f,  1.0f, 0.0f, 0.0f, 0.0f,  0.0f,
+            -5.0f, 5.0f, 5.0f, 1.0f, 0.0f, 0.0f,   0.0f, 5.0f,
+            -5.0f, -0.5f,  -5.0f, 1.0f, 0.0f, 0.0f,   5.0f,  0.0f,
 
-            -4.0f, -0.5f,  -4.0f,  1.0f, 0.0f, 0.0f, 4.0f,  0.0f,
-            -4.0f, 5.0f, -4.0f,  1.0f, 0.0f, 0.0f, 4.0f, 4.0f,
-            -4.0f, 5.0f, 4.0f, 1.0f, 0.0f, 0.0f,   0.0f, 4.0f
+            -5.0f, -0.5f,  -5.0f,  1.0f, 0.0f, 0.0f, 5.0f,  0.0f,
+            -5.0f, 5.0f, -5.0f,  1.0f, 0.0f, 0.0f, 5.0f, 5.0f,
+            -5.0f, 5.0f, 5.0f, 1.0f, 0.0f, 0.0f,   0.0f, 5.0f
     };
     float rightWallVertices[] = {
-            4.0f, -0.5f,  4.0f,  -1.0f, 0.0f, 0.0f, 4.0f,  0.0f,
-            4.0f, 5.0f, 4.0f, -1.0f, 0.0f, 0.0f,   4.0f, 4.0f,
-            4.0f, -0.5f,  -4.0f, -1.0f, 0.0f, 0.0f,   0.0f,  0.0f,
+            5.0f, -0.5f,  5.0f,  -1.0f, 0.0f, 0.0f, 5.0f,  0.0f,
+            5.0f, 5.0f, 5.0f, -1.0f, 0.0f, 0.0f,   5.0f, 5.0f,
+            5.0f, -0.5f,  -5.0f, -1.0f, 0.0f, 0.0f,   0.0f,  0.0f,
 
-            4.0f, -0.5f,  -4.0f,  -1.0f, 0.0f, 0.0f, 4.0f,  0.0f,
-            4.0f, 5.0f, -4.0f,  -1.0f, 0.0f, 0.0f, 4.0f, 4.0f,
-            4.0f, 5.0f, 4.0f, -1.0f, 0.0f, 0.0f,   0.0f, 4.0f
+            5.0f, -0.5f,  -5.0f,  -1.0f, 0.0f, 0.0f, 5.0f,  0.0f,
+            5.0f, 5.0f, -5.0f,  -1.0f, 0.0f, 0.0f, 5.0f, 5.0f,
+            5.0f, 5.0f, 5.0f, -1.0f, 0.0f, 0.0f,   0.0f, 5.0f
     };
     float backWallVertices[] = {
-            -4.0f, -0.5f,  -4.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f,
-            -4.0f, 5.0f, -4.0f, 0.0f, 0.0f, 1.0f,   0.0f, 4.0f,
-            4.0f, -0.5f,  -4.0f, 0.0f, 0.0f, 1.0f,   4.0f,  0.0f,
+            -5.0f, -0.5f,  -5.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f,
+            -5.0f, 5.0f, -5.0f, 0.0f, 0.0f, 1.0f,   0.0f, 5.0f,
+            5.0f, -0.5f,  -5.0f, 0.0f, 0.0f, 1.0f,   5.0f,  0.0f,
 
-            -4.0f, 5.0f,  -4.0f,  0.0f, 0.0f, 1.0f, 0.0f,  4.0f,
-            4.0f, 5.0f, -4.0f,  0.0f, 0.0f, 1.0f, 4.0f, 4.0f,
-            4.0f, -0.5f, -4.0f, 0.0f, 0.0f, 1.0f,   4.0f, 0.0f
+            -5.0f, 5.0f,  -5.0f,  0.0f, 0.0f, 1.0f, 0.0f,  5.0f,
+            5.0f, 5.0f, -5.0f,  0.0f, 0.0f, 1.0f, 5.0f, 5.0f,
+            5.0f, -0.5f, -5.0f, 0.0f, 0.0f, 1.0f,   5.0f, 0.0f
     };
 
     float frontWallVertices[] = {
-            -4.0f, -0.5f,  4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f,
-            -4.0f, 5.0f, 4.0f, 0.0f, 0.0f, -1.0f,   0.0f, 4.0f,
-            4.0f, -0.5f,  4.0f, 0.0f, 0.0f, -1.0f,   4.0f,  0.0f,
+            -5.0f, -0.5f,  5.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f,
+            -5.0f, 5.0f, 5.0f, 0.0f, 0.0f, -1.0f,   0.0f, 5.0f,
+            5.0f, -0.5f,  5.0f, 0.0f, 0.0f, -1.0f,   5.0f,  0.0f,
 
-            -4.0f, 5.0f,  4.0f,  0.0f, 0.0f, -1.0f, 0.0f,  4.0f,
-            4.0f, 5.0f, 4.0f,  0.0f, 0.0f, -1.0f, 4.0f, 4.0f,
-            4.0f, -0.5f, 4.0f, 0.0f, 0.0f, -1.0f,   4.0f, 0.0f
+            -5.0f, 5.0f,  5.0f,  0.0f, 0.0f, -1.0f, 0.0f,  5.0f,
+            5.0f, 5.0f, 5.0f,  0.0f, 0.0f, -1.0f, 5.0f, 5.0f,
+            5.0f, -0.5f, 5.0f, 0.0f, 0.0f, -1.0f,   5.0f, 0.0f
     };
 
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
@@ -361,6 +361,8 @@ int main()
     unsigned int cubeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/rust_specular.jpg").c_str());
     unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/concrete_diffuse.jpg").c_str());
     unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/concrete_specular.jpg").c_str());
+    unsigned int ceilingTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/ceiling_diffuse.jpg").c_str());
+    unsigned int ceilingTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/ceiling_specular.jpg").c_str());
     unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/stonebrick_diffuse.jpg").c_str());
     unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/stonebrick_specular.jpg").c_str());
     unsigned int transparentTexture = loadTexture(FileSystem::getPath("resources/textures/caution.png").c_str());
@@ -514,9 +516,9 @@ int main()
         //ceiling
         glBufferData(GL_ARRAY_BUFFER, sizeof(ceilingVertices), &ceilingVertices, GL_STATIC_DRAW);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floorTextureDiffuse);
+        glBindTexture(GL_TEXTURE_2D, ceilingTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, floorTextureSpecular);
+        glBindTexture(GL_TEXTURE_2D, ceilingTextureSpecular);
         shader.setMat4("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
         //leftWall
