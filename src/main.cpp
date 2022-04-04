@@ -125,7 +125,6 @@ int main()
     // -------------------------
     Shader shader("resources/shaders/shader.vs", "resources/shaders/shader.fs");
     Shader screenShader("resources/shaders/framebufferScreenShader.vs", "resources/shaders/framebufferScreenShader.fs");
-    Shader blendingShader("resources/shaders/blendingShader.vs", "resources/shaders/blendingShader.fs");
 
     Model ourModel(FileSystem::getPath("resources/objects/rust_gas/Gasoline_barrel.obj"));
     ourModel.SetShaderTextureNamePrefix("material.");
@@ -279,14 +278,14 @@ int main()
     };
 
     float transparentVertices[] = {
-            // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
-            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-            0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
-            1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+            // positions         //normals                                  // texture Coords (swapped y coordinates because texture is flipped upside down)
+            0.0f,  0.5f,  0.0f,  0.0f, 0.0f, 1.0f,0.0f,  0.0f,
+            0.0f, -0.5f,  0.0f,0.0f, 0.0f, 1.0f,  0.0f,  1.0f,
+            1.0f, -0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f,  1.0f,
 
-            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-            1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
-            1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+            0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f,  0.0f,
+            1.0f, -0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f,  1.0f,
+            1.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f,  0.0f
     };
 
 
@@ -349,9 +348,12 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, transparentVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)(3* sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6* sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 
@@ -365,7 +367,8 @@ int main()
     unsigned int ceilingTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/ceiling_specular.jpg").c_str());
     unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/stonebrick_diffuse.jpg").c_str());
     unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/stonebrick_specular.jpg").c_str());
-    unsigned int transparentTexture = loadTexture(FileSystem::getPath("resources/textures/caution.png").c_str());
+    unsigned int transparentTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/caution_diffuse.png").c_str());
+    unsigned int transparentTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/caution_specular.png").c_str());
 
     // shader configuration
     // --------------------
@@ -382,9 +385,6 @@ int main()
                     glm::vec3( 1.68f, 0.0f, -0.48f),
 
             };
-
-    blendingShader.use();
-    blendingShader.setInt("texture1", 0);
 
     // framebuffer configuration
     // -------------------------
@@ -439,6 +439,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.use();
+        shader.setBool("blending",false);
         shader.setFloat("material.shininess", 32.0f);
         shader.setVec3("viewPosition", camera.Position);
         //dirLight
@@ -488,21 +489,21 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glDisable(GL_CULL_FACE);
         // blending
-        blendingShader.use();
-        blendingShader.setMat4("view", view);
-        blendingShader.setMat4("projection", projection);
+        shader.setBool("blending",true);
         glBindVertexArray(transparentVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, transparentTexture);
+        glBindTexture(GL_TEXTURE_2D, transparentTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, transparentTextureSpecular);
         for (unsigned int i = 0; i < blending.size(); i++)
         {
             model = glm::mat4(1.0f);
             model = glm::translate(model, blending[i]);
             model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
-            blendingShader.setMat4("model", model);
+            shader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
-        shader.use();
+        shader.setBool("blending",false);
         // floor
         glBindVertexArray(planeVAO);
         glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
