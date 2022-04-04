@@ -37,6 +37,7 @@ float lastFrame = 0.0f;
 
 bool blur = false;
 bool spotLightOn = false;
+bool greenLight = false;
 
 struct PointLight {
     glm::vec3 position;
@@ -129,7 +130,7 @@ int main()
     Model ourModel(FileSystem::getPath("resources/objects/rust_gas/Gasoline_barrel.obj"));
     ourModel.SetShaderTextureNamePrefix("material.");
 
-    pointLight.position = glm::vec3(0.0f, 4.0, 2.0);
+    pointLight.position = glm::vec3(0.0f, 4.0, 4.0);
     pointLight.ambient = glm::vec3(0.2, 0.2, 0.2);
     pointLight.diffuse = glm::vec3(0.7, 0.7, 0.7);
     pointLight.specular = glm::vec3(1.0, 1.0, 1.0);
@@ -448,10 +449,18 @@ int main()
         shader.setVec3("dirLight.diffuse", dirLight.diffuse);
         shader.setVec3("dirLight.specular", dirLight.specular);
         //pointLight
+        if(greenLight) {
+            shader.setVec3("pointLight.ambient", glm::vec3(0.0f,0.2f,0.0f));
+            shader.setVec3("pointLight.diffuse",  glm::vec3(0.0f,0.8,0.0f));
+            shader.setVec3("pointLight.specular",  glm::vec3(0.0f,1.0f,0.0f));
+        }
+        else{
+
+            shader.setVec3("pointLight.ambient", pointLight.ambient);
+            shader.setVec3("pointLight.diffuse", pointLight.diffuse);
+            shader.setVec3("pointLight.specular", pointLight.specular);
+        }
         shader.setVec3("pointLight.position", pointLight.position);
-        shader.setVec3("pointLight.ambient", pointLight.ambient);
-        shader.setVec3("pointLight.diffuse", pointLight.diffuse);
-        shader.setVec3("pointLight.specular", pointLight.specular);
         shader.setFloat("pointLight.constant", pointLight.constant);
         shader.setFloat("pointLight.linear", pointLight.linear);
         shader.setFloat("pointLight.quadratic", pointLight.quadratic);
@@ -619,17 +628,6 @@ void processInput(GLFWwindow *window)
     if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE){
         blur = false;
     }
-
-    if(glfwGetKey(window,GLFW_KEY_G) == GLFW_PRESS){
-        pointLight.ambient = glm::vec3(0.0, 0.2, 0.0);
-        pointLight.diffuse = glm::vec3(0.0, 0.8, 0.0);
-        pointLight.specular = glm::vec3(0.0, 1.0, 0.0);
-    }
-    if(glfwGetKey(window,GLFW_KEY_G) == GLFW_RELEASE){
-        pointLight.ambient = glm::vec3(0.2, 0.2, 0.2);
-        pointLight.diffuse = glm::vec3(0.8, 0.8, 0.8);
-        pointLight.specular = glm::vec3(1.0, 1.0, 1.0);
-    }
 }
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -638,6 +636,12 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         spotLightOn = !spotLightOn;
 
     }
+
+    if(key == GLFW_KEY_G && action == GLFW_PRESS) {
+        greenLight = !greenLight;
+    }
+
+
 }
 
 
