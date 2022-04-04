@@ -48,6 +48,7 @@ in vec3 Normal;
 in vec2 TexCoords;
 
 uniform bool spotLightOn;
+uniform bool blending;
 uniform PointLight pointLight;
 uniform DirLight dirLight;
 uniform SpotLight spotLight;
@@ -127,5 +128,12 @@ void main()
     result += CalcPointLight(pointLight, normal, FragPos, viewDir);
     if (spotLightOn)
         result += CalcSpotLight(spotLight, normal, FragPos, viewDir);
-    FragColor = vec4(result, 1.0);
+    if(blending) {
+         vec4 texColor = vec4(result,texture(material.texture_diffuse1, TexCoords).a);
+            if(texColor.a < 0.1)
+                discard;
+            FragColor = texColor;
+    }
+    else
+        FragColor = vec4(result, 1.0);
 }
