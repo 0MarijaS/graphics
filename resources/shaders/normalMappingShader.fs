@@ -40,6 +40,7 @@ struct Material {
     sampler2D texture_diffuse1;
     sampler2D texture_specular1;
     sampler2D texture_normal1;
+    sampler2D texture_height1;
 
     float shininess;
 };
@@ -55,7 +56,7 @@ uniform PointLight pointLight;
 uniform DirLight dirLight;
 uniform SpotLight spotLight;
 uniform Material material;
-//uniform vec3 viewPos;
+uniform vec3 parallax;
 
 float CalcBlinnPhongSpecular(vec3 lightDir, vec3 viewDir,vec3 normal){
     vec3 halfwayDir = normalize(lightDir + viewDir);
@@ -121,10 +122,25 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     return (ambient + diffuse + specular);
 }
 
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+{
+    float height =  texture(material.texture_height1, texCoords).r;
+    return texCoords - viewDir.xy * (height * heightScale);
+}
 
 void main()
 {
 
+    // offset texture coordinates with Parallax Mapping
+    vec3 viewDir = normalize(TangentViewPos - TangentFragPos);
+    vec2 texCoords = TexCoords;
+
+    if(parallax){
+         texCoords = ParallaxMapping(TexCoords,  viewDir);
+         if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
+             discard;
+    }
+    
  // obtain normal from normal map in range [0,1]
     vec3 normal = texture(material.texture_normal1, TexCoords).rgb;
     // transform normal vector to range [-1,1]
