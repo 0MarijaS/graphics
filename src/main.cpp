@@ -38,7 +38,7 @@ float lastFrame = 0.0f;
 
 bool blur = false;
 bool spotLightOn = false;
-bool greenLight = false;
+bool redLight = false;
 
 struct PointLight {
     glm::vec3 position;
@@ -370,10 +370,10 @@ int main() {
         shader.setVec3("dirLight.diffuse", dirLight.diffuse);
         shader.setVec3("dirLight.specular", dirLight.specular);
         //pointLight
-        if (greenLight) {
-            shader.setVec3("pointLight.ambient", glm::vec3(0.0f, 0.2f, 0.0f));
-            shader.setVec3("pointLight.diffuse", glm::vec3(0.0f, 0.8, 0.0f));
-            shader.setVec3("pointLight.specular", glm::vec3(0.0f, 1.0f, 0.0f));
+        if (redLight) {
+            shader.setVec3("pointLight.ambient", glm::vec3((int)glfwGetTime()%2*0.3f, 0.0f, 0.0f));
+            shader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*1.0f, 0.0, 0.0f));
+            shader.setVec3("pointLight.specular", glm::vec3(1.0, 1.0f, 1.0f));
         } else {
 
             shader.setVec3("pointLight.ambient", pointLight.ambient);
@@ -452,10 +452,10 @@ int main() {
         normalMappingShader.setVec3("dirLight.diffuse", dirLight.diffuse);
         normalMappingShader.setVec3("dirLight.specular", dirLight.specular);
         //pointLight
-        if (greenLight) {
-            normalMappingShader.setVec3("pointLight.ambient", glm::vec3(0.0f, 0.2f, 0.0f));
-            normalMappingShader.setVec3("pointLight.diffuse", glm::vec3(0.0f, 0.8, 0.0f));
-            normalMappingShader.setVec3("pointLight.specular", glm::vec3(0.0f, 1.0f, 0.0f));
+        if (redLight) {
+            normalMappingShader.setVec3("pointLight.ambient", glm::vec3((int)glfwGetTime()%2*0.3f, 0.0f, 0.0f));
+            normalMappingShader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*1.0f, 0.0, 0.0f));
+            normalMappingShader.setVec3("pointLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
         } else {
 
             normalMappingShader.setVec3("pointLight.ambient", pointLight.ambient);
@@ -761,8 +761,8 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
     }
 
-    if(key == GLFW_KEY_G && action == GLFW_PRESS) {
-        greenLight = !greenLight;
+    if(key == GLFW_KEY_R && action == GLFW_PRESS) {
+        redLight = !redLight;
     }
 
 
