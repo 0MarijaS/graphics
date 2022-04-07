@@ -21,10 +21,6 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 unsigned int loadTexture(const char *path);
 
 
-//unsigned int quadVAO = 0;
-//unsigned int quadVBO;
-//void renderQuad(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3, glm::vec2 uv4, glm::vec3 nm);
-
 // settings
 const unsigned int SCR_WIDTH = 1200;
 const unsigned int SCR_HEIGHT = 900;
@@ -209,25 +205,25 @@ int main() {
             -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top-left
     };
 
-    float floorVertices[]{
-            5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
-            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f,
-            -5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-
-            5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
-            5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 5.0f,
-            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f
-    };
-
-    float ceilingVertices[] = {
-            5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
-            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f,
-            -5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-
-            5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
-            5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 5.0f,
-            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f
-    };
+//    float floorVertices[]{
+//            5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
+//            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f,
+//            -5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+//
+//            5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
+//            5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 5.0f,
+//            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f
+//    };
+//
+//    float ceilingVertices[] = {
+//            5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
+//            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f,
+//            -5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+//
+//            5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
+//            5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 5.0f,
+//            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f
+//    };
 
 
 //    float leftWallVertices[] = {
@@ -304,20 +300,6 @@ int main() {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
     glEnableVertexAttribArray(2);
-    // plane VAO
-    unsigned int planeVAO, planeVBO;
-    glGenVertexArrays(1, &planeVAO);
-    glGenBuffers(1, &planeVBO);
-    glBindVertexArray(planeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
 
     //normalQuad VAO
     unsigned int quadVAO, quadVBO;
@@ -371,25 +353,16 @@ int main() {
     unsigned int cubeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/rust_specular.jpg").c_str());
     unsigned int ceilingTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/ceiling_diffuse.jpg").c_str());
     unsigned int ceilingTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/ceiling_specular.jpg").c_str());
-    unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/ceiling_diffuse.jpg").c_str());
-    unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/ceiling_specular.jpg").c_str());
+    unsigned int ceilingTextureNormal = loadTexture(FileSystem::getPath("resources/textures/ceiling_normal.jpg").c_str());
+    unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/concrete_wall.jpg").c_str());
+    unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/concrete_wall_specular.jpg").c_str());
+    unsigned int floorTextureNormal = loadTexture(FileSystem::getPath("resources/textures/concrete_wall_normal.jpg").c_str());
     unsigned int transparentTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/caution_diffuse.png").c_str());
     unsigned int transparentTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/caution_specular.png").c_str());
-    unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/Brick_Wall_Texture.jpg").c_str());
-    unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/Brick_Wall_Texture_SPECULAR.jpg").c_str());
-    unsigned int wallTextureNormal = loadTexture(FileSystem::getPath("resources/textures/Brick_Wall_Texture_NORMAL.jpg").c_str());
-    unsigned int wallTextureDisplacement = loadTexture(FileSystem::getPath("resources/textures/Brick_Wall_Texture_DISP.jpg").c_str());
-
-    // shader configuration
-    // --------------------
-    // shader.use();
-    //shader.setInt("material.texture_diffuse1",0);
-    //shader.setInt("material.texture_specular1", 1);
-
-//    normalMappingShader.use();
-//    normalMappingShader.setInt("material.texture_diffuse1", 0);
-//    normalMappingShader.setInt("material.texture_specular1", 1);
-//    normalMappingShader.setInt("material.texture_normal1", 2);
+    unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/BRICKS.jpg").c_str());
+    unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/BRICKS_SPEC.jpg").c_str());
+    unsigned int wallTextureNormal = loadTexture(FileSystem::getPath("resources/textures/BRICKS_NORM.jpg").c_str());
+    unsigned int wallTextureDisplacement = loadTexture(FileSystem::getPath("resources/textures/BRICKS_DISP.jpg").c_str());
 
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
@@ -526,26 +499,8 @@ int main() {
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
         shader.setBool("blending", false);
-        // floor
-        glBindVertexArray(planeVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertices), &floorVertices, GL_STATIC_DRAW);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floorTextureDiffuse);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, floorTextureSpecular);
-        shader.setMat4("model", glm::mat4(1.0f));
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        //ceiling
-        glBufferData(GL_ARRAY_BUFFER, sizeof(ceilingVertices), &ceilingVertices, GL_STATIC_DRAW);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, ceilingTextureDiffuse);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, ceilingTextureSpecular);
-        shader.setMat4("model", glm::mat4(1.0f));
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glBindVertexArray(0);
 
+        //normalMapping
         normalMappingShader.use();
         normalMappingShader.setVec3("viewPos", camera.Position);
         normalMappingShader.setVec3("lightPos", pointLight.position);
@@ -594,11 +549,6 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, wallTextureSpecular);
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, wallTextureNormal);
-
-//
-//       renderQuad(glm::vec3(-5.0f, 5.0f, 5.0f), glm::vec3(-5.0f, -0.5f, 5.0f), glm::vec3(-5.0f, -0.5f, -5.0f),
-//                         glm::vec3(-5.0f, 5.0f, -5.0f), glm::vec2(0.0f, 5.5f), glm::vec2(0.0f, 0.0f),
-//                         glm::vec2(10.0f, 0.0f), glm::vec2(10.0f, 5.5f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 
         glm::vec3 pos1(-5.0f, 5.0f, 5.0f);
@@ -663,12 +613,11 @@ int main() {
                 pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
         };
 
+        //leftWall
         glBindVertexArray(quadVAO);
         glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        //leftWall
 
         //rightWall
         model = glm::mat4(1.0f);
@@ -691,6 +640,93 @@ int main() {
         normalMappingShader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
+
+        //floor
+        pos1 = glm::vec3 (-5.0f, -0.5f, -5.0f);
+        pos2 = glm::vec3 (-5.0f, -0.5f, 5.0f);
+        pos3 = glm::vec3 ( 5.0f, -0.5f, 5.0f);
+        pos4 = glm::vec3 ( 5.0f, -0.5f, -5.0f);
+        // texture coordinates
+        uv1 = glm::vec2 (0.0f, 10.0f);
+        uv2 = glm::vec2 (0.0f, 0.0f);
+        uv3 = glm::vec2 (10.0f, 0.0f);
+        uv4 = glm::vec2(10.0f, 10.f);
+        // normal vector
+        nm = glm::vec3 (0.0f, 1.0f, 0.0f);
+
+        // calculate tangent/bitangent vectors of both triangles
+        // triangle 1
+        // ----------
+        edge1 = pos2 - pos1;
+        edge2 = pos3 - pos1;
+        deltaUV1 = uv2 - uv1;
+        deltaUV2 = uv3 - uv1;
+
+        f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+        tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+        bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+        // triangle 2
+        // ----------
+        edge1 = pos3 - pos1;
+        edge2 = pos4 - pos1;
+        deltaUV1 = uv3 - uv1;
+        deltaUV2 = uv4 - uv1;
+
+        f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+        tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+
+        bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+
+        float vertices2[] = {
+                // positions            // normal         // texcoords  // tangent                          // bitangent
+                pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+                pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+                pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+
+                pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
+                pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
+                pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
+        };
+
+        glBindVertexArray(quadVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), &vertices2, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, floorTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, floorTextureSpecular);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, floorTextureNormal);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        //ceiling
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, ceilingTextureDiffuse);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, ceilingTextureSpecular);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, ceilingTextureNormal);
+        model = glm::mat4(1.0f);
+        model=glm::translate(model, glm::vec3(0.0f, 4.5f, 0.0f));
+        model=glm::rotate(model, glm::radians(180.0f), glm::normalize(glm::vec3(1.0, 0.0, 0.0)));
+        normalMappingShader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
         //model
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
@@ -706,8 +742,7 @@ int main() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
         // clear all relevant buffers
-        glClearColor(1.0f, 1.0f, 1.0f,
-                     1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+        glClearColor(1.0f, 1.0f, 1.0f,1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
 
         screenShader.use();
@@ -728,11 +763,9 @@ int main() {
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &cubeVAO);
-    glDeleteVertexArrays(1, &planeVAO);
     glDeleteVertexArrays(1, &quadVAO);
     glDeleteVertexArrays(1, &screenQuadVAO);
     glDeleteBuffers(1, &cubeVBO);
-    glDeleteBuffers(1, &planeVBO);
     glDeleteBuffers(1, &quadVBO);
     glDeleteBuffers(1, &screenQuadVBO);
 
