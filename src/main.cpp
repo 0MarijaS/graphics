@@ -749,8 +749,7 @@ int main() {
         screenShader.setBool("blur", blur);
         glBindVertexArray(screenQuadVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D,
-                      textureColorbuffer);    // use the color attachment texture as the texture of the quad plane
+        glBindTexture(GL_TEXTURE_2D,textureColorbuffer);    // use the color attachment texture as the texture of the quad plane
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
