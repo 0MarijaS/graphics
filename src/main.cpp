@@ -22,11 +22,11 @@ unsigned int loadTexture(const char *path);
 
 
 // settings
-const unsigned int SCR_WIDTH = 1200;
-const unsigned int SCR_HEIGHT = 900;
+const unsigned int SCR_WIDTH = 1100;
+const unsigned int SCR_HEIGHT = 850;
 
 // camera
-Camera camera(glm::vec3(0.0f, 1.2f, 4.95f));
+Camera camera(glm::vec3(0.0f, 1.4f, 4.95f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -367,13 +367,6 @@ int main() {
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
 
-    vector<glm::vec3> blending
-            {
-                    glm::vec3(-2.32f, 0.0f, -0.48f),
-                    glm::vec3(1.68f, 0.0f, -0.48f),
-
-            };
-
     // framebuffer configuration
     // -------------------------
     unsigned int framebuffer;
@@ -476,11 +469,13 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, cubeTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, cubeTextureSpecular);
-        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, -1.0f));
+        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, -1.5f));
+        model = glm::scale(model, glm::vec3(1.3, 1.3, 1.3));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, -1.0f));
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, -1.5f));
+        model = glm::scale(model, glm::vec3(1.3, 1.3, 1.3));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glDisable(GL_CULL_FACE);
@@ -491,13 +486,16 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, transparentTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, transparentTextureSpecular);
-        for (unsigned int i = 0; i < blending.size(); i++) {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, blending[i]);
-            model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
-            shader.setMat4("model", model);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-        }
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(1.54f,0.1f,-0.83));
+        model = glm::scale(model, glm::vec3(0.9, 0.9, 0.9));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-2.44f,0.1f,-0.83));
+        model = glm::scale(model, glm::vec3(0.9, 0.9, 0.9));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         shader.setBool("blending", false);
 
         //normalMapping
@@ -731,9 +729,9 @@ int main() {
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         model = glm::mat4(1.0f);
-        model = glm::translate(model,glm::vec3(0.0f, 0.25f, 0.5f)); // translate it down so it's at the center of the scene
-        model = glm::rotate(model, glm::radians(170.0f), glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
-        model = glm::scale(model,glm::vec3(0.15f, 0.15f, 0.15f));    // it's a bit too big for our scene, so scale it down
+        model = glm::translate(model,glm::vec3(0.0f, 0.25f, -3.0f)); // translate it down so it's at the center of the scene
+        model = glm::rotate(model, glm::radians(172.0f), glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
+        model = glm::scale(model,glm::vec3(0.2f, 0.25f, 0.2f));    // it's a bit too big for our scene, so scale it down
         normalMappingShader.setMat4("model", model);
         ourModel.Draw(normalMappingShader);
         glDisable(GL_CULL_FACE);
@@ -884,66 +882,3 @@ unsigned int loadTexture(char const * path)
     }
     return textureID;
 }
-//
-//void renderQuad(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3, glm::vec2 uv4, glm::vec3 nm)
-//{
-//        // calculate tangent/bitangent vectors of both triangles
-//        glm::vec3 tangent1, bitangent1;
-//        glm::vec3 tangent2, bitangent2;
-//        // triangle 1
-//        // ----------
-//        glm::vec3 edge1 = pos2 - pos1;
-//        glm::vec3 edge2 = pos3 - pos1;
-//        glm::vec2 deltaUV1 = uv2 - uv1;
-//        glm::vec2 deltaUV2 = uv3 - uv1;
-//
-//        float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-//
-//        tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-//        tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-//        tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-//
-//        bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-//        bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-//        bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-//
-//        // triangle 2
-//        // ----------
-//        edge1 = pos3 - pos1;
-//        edge2 = pos4 - pos1;
-//        deltaUV1 = uv3 - uv1;
-//        deltaUV2 = uv4 - uv1;
-//
-//        f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-//
-//        tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-//        tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-//        tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-//
-//
-//        bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-//        bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-//        bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-//
-//
-//        float quadVertices[] = {
-//                // positions            // normal         // texcoords  // tangent                          // bitangent
-//                pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z,
-//                bitangent1.x, bitangent1.y, bitangent1.z,
-//                pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z,
-//                bitangent1.x, bitangent1.y, bitangent1.z,
-//                pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent1.x, tangent1.y, tangent1.z,
-//                bitangent1.x, bitangent1.y, bitangent1.z,
-//
-//                pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent2.x, tangent2.y, tangent2.z,
-//                bitangent2.x, bitangent2.y, bitangent2.z,
-//                pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z,
-//                bitangent2.x, bitangent2.y, bitangent2.z,
-//                pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z,
-//                bitangent2.x, bitangent2.y, bitangent2.z
-//        };
-//        glBindVertexArray(quadVAO);
-//        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-//        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-//        glDrawArrays(GL_TRIANGLES, 0, 6);
-//}
