@@ -24,6 +24,7 @@ unsigned int loadTexture(const char *path);
 // settings
 const unsigned int SCR_WIDTH = 1100;
 const unsigned int SCR_HEIGHT = 850;
+float heightScale = 0.1;
 
 // camera
 Camera camera(glm::vec3(0.0f, 1.4f, 4.95f));
@@ -204,65 +205,6 @@ int main() {
             -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // bottom-left
             -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top-left
     };
-
-//    float floorVertices[]{
-//            5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
-//            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f,
-//            -5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-//
-//            5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
-//            5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 5.0f,
-//            -5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f
-//    };
-//
-//    float ceilingVertices[] = {
-//            5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
-//            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f,
-//            -5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-//
-//            5.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
-//            5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 5.0f,
-//            -5.0f, 5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f
-//    };
-
-
-//    float leftWallVertices[] = {
-//            -5.0f, -0.5f,  5.0f,  1.0f, 0.0f, 0.0f, 0.0f,  0.0f,
-//            -5.0f, 5.0f, 5.0f, 1.0f, 0.0f, 0.0f,   0.0f, 5.0f,
-//            -5.0f, -0.5f,  -5.0f, 1.0f, 0.0f, 0.0f,   5.0f,  0.0f,
-//
-//            -5.0f, -0.5f,  -5.0f,  1.0f, 0.0f, 0.0f, 5.0f,  0.0f,
-//            -5.0f, 5.0f, -5.0f,  1.0f, 0.0f, 0.0f, 5.0f, 5.0f,
-//            -5.0f, 5.0f, 5.0f, 1.0f, 0.0f, 0.0f,   0.0f, 5.0f
-//    };
-//    float rightWallVertices[] = {
-//            5.0f, -0.5f, 5.0f, -1.0f, 0.0f, 0.0f, 5.0f, 0.0f,
-//            5.0f, 5.0f, 5.0f, -1.0f, 0.0f, 0.0f, 5.0f, 5.0f,
-//            5.0f, -0.5f, -5.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-//
-//            5.0f, -0.5f, -5.0f, -1.0f, 0.0f, 0.0f, 5.0f, 0.0f,
-//            5.0f, 5.0f, -5.0f, -1.0f, 0.0f, 0.0f, 5.0f, 5.0f,
-//            5.0f, 5.0f, 5.0f, -1.0f, 0.0f, 0.0f, 0.0f, 5.0f
-//    };
-//    float backWallVertices[] = {
-//            -5.0f, -0.5f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-//            -5.0f, 5.0f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 5.0f,
-//            5.0f, -0.5f, -5.0f, 0.0f, 0.0f, 1.0f, 5.0f, 0.0f,
-//
-//            -5.0f, 5.0f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 5.0f,
-//            5.0f, 5.0f, -5.0f, 0.0f, 0.0f, 1.0f, 5.0f, 5.0f,
-//            5.0f, -0.5f, -5.0f, 0.0f, 0.0f, 1.0f, 5.0f, 0.0f
-//    };
-//
-//    float frontWallVertices[] = {
-//            -5.0f, -0.5f, 5.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-//            -5.0f, 5.0f, 5.0f, 0.0f, 0.0f, -1.0f, 0.0f, 5.0f,
-//            5.0f, -0.5f, 5.0f, 0.0f, 0.0f, -1.0f, 5.0f, 0.0f,
-//
-//            -5.0f, 5.0f, 5.0f, 0.0f, 0.0f, -1.0f, 0.0f, 5.0f,
-//            5.0f, 5.0f, 5.0f, 0.0f, 0.0f, -1.0f, 5.0f, 5.0f,
-//            5.0f, -0.5f, 5.0f, 0.0f, 0.0f, -1.0f, 5.0f, 0.0f
-//    };
 
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
             // positions   // texCoords
@@ -469,12 +411,12 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, cubeTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, cubeTextureSpecular);
-        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, -1.5f));
+        model = glm::translate(model, glm::vec3(-2.0f, 0.155f, -1.5f));
         model = glm::scale(model, glm::vec3(1.3, 1.3, 1.3));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, -1.5f));
+        model = glm::translate(model, glm::vec3(2.0f, 0.155, -1.5f));
         model = glm::scale(model, glm::vec3(1.3, 1.3, 1.3));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -487,12 +429,12 @@ int main() {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, transparentTextureSpecular);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(1.54f,0.1f,-0.83));
+        model = glm::translate(model, glm::vec3(1.54f,0.15f,-0.83));
         model = glm::scale(model, glm::vec3(0.9, 0.9, 0.9));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-2.44f,0.1f,-0.83));
+        model = glm::translate(model, glm::vec3(-2.44f,0.15f,-0.83));
         model = glm::scale(model, glm::vec3(0.9, 0.9, 0.9));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -500,9 +442,9 @@ int main() {
 
         //normalMapping
         normalMappingShader.use();
+        normalMappingShader.setFloat("heightScale", heightScale);
         normalMappingShader.setVec3("viewPos", camera.Position);
         normalMappingShader.setVec3("lightPos", pointLight.position);
-        normalMappingShader.setVec3(" lightPosSpotLight", camera.Position);
         normalMappingShader.setFloat("material.shininess", 32.0f);
         //dirLight
         normalMappingShader.setVec3("dirLight.direction", dirLight.direction);
@@ -541,12 +483,16 @@ int main() {
         normalMappingShader.setMat4("view", view);
         normalMappingShader.setMat4("model", glm::mat4(1.0f));
 
+        normalMappingShader.setBool("parallax", true);
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, wallTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, wallTextureSpecular);
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, wallTextureNormal);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, wallTextureDisplacement);
 
 
         glm::vec3 pos1(-5.0f, 5.0f, 5.0f);
@@ -619,27 +565,26 @@ int main() {
 
         //rightWall
         model = glm::mat4(1.0f);
-       // model=glm::translate(model, glm::vec3(10.0f, 0.0f, 0.0f));
         model=glm::rotate(model, glm::radians(180.0f), glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
         normalMappingShader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         //frontWall
         model = glm::mat4(1.0f);
-        //model=glm::translate(model, glm::vec3(5.0f, 0.0f, 5.0f));
         model=glm::rotate(model, glm::radians(90.0f), glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
         normalMappingShader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         //backWall
         model = glm::mat4(1.0f);
-        //model=glm::translate(model, glm::vec3(5.0f, 0.0f, -5.0f));
         model=glm::rotate(model, glm::radians(270.0f), glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
         normalMappingShader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
-        //floor
+        //floor and ceiling
+        normalMappingShader.setBool("parallax", false);
+
         pos1 = glm::vec3 (-5.0f, -0.5f, -5.0f);
         pos2 = glm::vec3 (-5.0f, -0.5f, 5.0f);
         pos3 = glm::vec3 ( 5.0f, -0.5f, 5.0f);
@@ -729,9 +674,9 @@ int main() {
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         model = glm::mat4(1.0f);
-        model = glm::translate(model,glm::vec3(0.0f, 0.25f, -3.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model,glm::vec3(0.0f, 0.85f, -3.0f)); // translate it down so it's at the center of the scene
         model = glm::rotate(model, glm::radians(172.0f), glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
-        model = glm::scale(model,glm::vec3(0.2f, 0.25f, 0.2f));    // it's a bit too big for our scene, so scale it down
+        model = glm::scale(model,glm::vec3(0.235f, 0.25f, 0.2f));    // it's a bit too big for our scene, so scale it down
         normalMappingShader.setMat4("model", model);
         ourModel.Draw(normalMappingShader);
         glDisable(GL_CULL_FACE);
@@ -791,6 +736,21 @@ void processInput(GLFWwindow *window)
     }
     if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE){
         blur = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+    {
+        if (heightScale > 0.0f)
+            heightScale -= 0.0005f;
+        else
+            heightScale = 0.0f;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    {
+        if (heightScale < 1.0f)
+            heightScale += 0.0005f;
+        else
+            heightScale = 1.0f;
     }
 }
 
