@@ -301,7 +301,8 @@ int main() {
     unsigned int floorTextureNormal = loadTexture(FileSystem::getPath("resources/textures/concrete_wall_normal.jpg").c_str());
     unsigned int cautionTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/caution_diffuse.png").c_str());
     unsigned int cautionTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/caution_specular.png").c_str());
-    unsigned int manholeTexture = loadTexture(FileSystem::getPath("resources/textures/manhole.png").c_str());
+    unsigned int manholeTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/manhole2.png").c_str());
+    unsigned int manholeTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/manhole_specular.png").c_str());
     unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/BRICKS.jpg").c_str());
     unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/BRICKS_SPEC.jpg").c_str());
     unsigned int wallTextureNormal = loadTexture(FileSystem::getPath("resources/textures/BRICKS_NORM.jpg").c_str());
@@ -373,7 +374,7 @@ int main() {
         //pointLight
         if (redLight) {
             shader.setVec3("pointLight.ambient", glm::vec3((int)glfwGetTime()%2*0.3f, 0.0f, 0.0f));
-            shader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*0.8f, 0.0, 0.0f));
+            shader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*0.7f, 0.0, 0.0f));
             shader.setVec3("pointLight.specular", glm::vec3(1.0, 1.0f, 1.0f));
         } else {
 
@@ -441,9 +442,9 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, manholeTexture);
+        glBindTexture(GL_TEXTURE_2D, manholeTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, manholeTexture);
+        glBindTexture(GL_TEXTURE_2D, manholeTextureSpecular);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-4.0f,-0.49f,3.8));
         model = glm::rotate(model,glm::radians(90.0f), glm::normalize(glm::vec3(1.0,0.0,0.0)));
@@ -467,7 +468,7 @@ int main() {
         //pointLight
         if (redLight) {
             normalMappingShader.setVec3("pointLight.ambient", glm::vec3((int)glfwGetTime()%2*0.3f, 0.0f, 0.0f));
-            normalMappingShader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*0.8f, 0.0, 0.0f));
+            normalMappingShader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*0.7f, 0.0, 0.0f));
             normalMappingShader.setVec3("pointLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
         } else {
 
