@@ -1,6 +1,6 @@
 # Graphics project - Nuclear waste storage
 
-University project for Computer Graphics using OpenGl, GLFW, GLM and Glad.
+University project for Computer Graphics using OpenGL, GLFW, GLM and Glad.
 
 # Controls
 **WASD, MOUSE** - camera movement 
