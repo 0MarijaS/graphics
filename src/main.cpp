@@ -299,8 +299,9 @@ int main() {
     unsigned int floorTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/concrete_wall.jpg").c_str());
     unsigned int floorTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/concrete_wall_specular.jpg").c_str());
     unsigned int floorTextureNormal = loadTexture(FileSystem::getPath("resources/textures/concrete_wall_normal.jpg").c_str());
-    unsigned int transparentTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/caution_diffuse.png").c_str());
-    unsigned int transparentTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/caution_specular.png").c_str());
+    unsigned int cautionTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/caution_diffuse.png").c_str());
+    unsigned int cautionTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/caution_specular.png").c_str());
+    unsigned int manholeTexture = loadTexture(FileSystem::getPath("resources/textures/manhole.png").c_str());
     unsigned int wallTextureDiffuse = loadTexture(FileSystem::getPath("resources/textures/BRICKS.jpg").c_str());
     unsigned int wallTextureSpecular = loadTexture(FileSystem::getPath("resources/textures/BRICKS_SPEC.jpg").c_str());
     unsigned int wallTextureNormal = loadTexture(FileSystem::getPath("resources/textures/BRICKS_NORM.jpg").c_str());
@@ -372,7 +373,7 @@ int main() {
         //pointLight
         if (redLight) {
             shader.setVec3("pointLight.ambient", glm::vec3((int)glfwGetTime()%2*0.3f, 0.0f, 0.0f));
-            shader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*1.0f, 0.0, 0.0f));
+            shader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*0.8f, 0.0, 0.0f));
             shader.setVec3("pointLight.specular", glm::vec3(1.0, 1.0f, 1.0f));
         } else {
 
@@ -425,9 +426,9 @@ int main() {
         shader.setBool("blending", true);
         glBindVertexArray(transparentVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, transparentTextureDiffuse);
+        glBindTexture(GL_TEXTURE_2D, cautionTextureDiffuse);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, transparentTextureSpecular);
+        glBindTexture(GL_TEXTURE_2D, cautionTextureSpecular);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(1.54f,0.15f,-0.83));
         model = glm::scale(model, glm::vec3(0.9, 0.9, 0.9));
@@ -438,7 +439,19 @@ int main() {
         model = glm::scale(model, glm::vec3(0.9, 0.9, 0.9));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, manholeTexture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, manholeTexture);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-4.0f,-0.49f,3.8));
+        model = glm::rotate(model,glm::radians(90.0f), glm::normalize(glm::vec3(1.0,0.0,0.0)));
+        model = glm::scale(model, glm::vec3(1.4, 1.4, 1.4));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         shader.setBool("blending", false);
+
 
         //normalMapping
         normalMappingShader.use();
@@ -454,7 +467,7 @@ int main() {
         //pointLight
         if (redLight) {
             normalMappingShader.setVec3("pointLight.ambient", glm::vec3((int)glfwGetTime()%2*0.3f, 0.0f, 0.0f));
-            normalMappingShader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*1.0f, 0.0, 0.0f));
+            normalMappingShader.setVec3("pointLight.diffuse", glm::vec3((int)glfwGetTime()%2*0.8f, 0.0, 0.0f));
             normalMappingShader.setVec3("pointLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
         } else {
 
