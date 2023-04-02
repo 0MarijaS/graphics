@@ -22,6 +22,4 @@ Rusted gasoline barrel model: https://www.turbosquid.com/3d-models/3d-model-rust
 
 **Group B:** Normal mapping, Parallax mapping
 
-# Demo video
 
-https://youtu.be/8nZlyXJs53g
